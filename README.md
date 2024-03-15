@@ -1,2 +1,2 @@
 # dayglass
-An hourglass but for your day.
+An hourglass but for your day, watch the seconds tick away.

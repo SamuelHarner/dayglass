@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Dayglass")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dff20aaa6bddd3d3092ebae1e652582bbbb99a1b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a21332fc4abe40586f9933732f234381a4c1e050")]
 [assembly: System.Reflection.AssemblyProductAttribute("Dayglass")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Dayglass")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
