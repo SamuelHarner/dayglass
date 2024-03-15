@@ -1,0 +1,48 @@
+@page
+@model Dayglass.Pages.ShowAnimationModel
+@{
+    ViewData["Title"] = "Day Countdown";
+}
+
+<h2>Day Countdown</h2>
+
+<div id="timePassed">Seconds Passed: 0</div>
+<div id="timeRemaining">Seconds Remaining: 0</div>
+
+@section Scripts {
+    <script>
+        // Calculate the user's day duration, elapsed time, and remaining time in seconds
+        const dayStart = new Date();
+        dayStart.setHours(@Model.DayStart.Hours, @Model.DayStart.Minutes, 0, 0);
+        const dayEnd = new Date();
+        dayEnd.setHours(@Model.DayEnd.Hours, @Model.DayEnd.Minutes, 0, 0);
+        const now = new Date();
+
+        let totalSeconds = Math.floor((dayEnd - dayStart) / 1000);
+        let elapsedSeconds = Math.floor((now - dayStart) / 1000);
+        let remainingSeconds = Math.max(totalSeconds - elapsedSeconds, 0);
+
+        // Update the displayed counts every second
+        function updateCounts() {
+            // Calculate updated elapsed and remaining time
+            elapsedSeconds = Math.floor((new Date() - dayStart) / 1000);
+            remainingSeconds = Math.max(totalSeconds - elapsedSeconds, 0);
+
+            // Update the HTML elements
+            document.getElementById("timePassed").textContent = "Seconds Passed: " + elapsedSeconds;
+            document.getElementById("timeRemaining").textContent = "Seconds Remaining: " + remainingSeconds;
+
+            // End the countdown when the day is over
+            if (remainingSeconds <= 0) {
+                clearInterval(intervalId);
+                document.getElementById("timeRemaining").textContent = "The day has ended.";
+            }
+        }
+
+        // Call updateCounts every second
+        const intervalId = setInterval(updateCounts, 1000);
+
+        // Initialize the counts on page load
+        updateCounts();
+    </script>
+}

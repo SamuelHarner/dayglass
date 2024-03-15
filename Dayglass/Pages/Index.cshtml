@@ -1,0 +1,15 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Enter the start and end of your day:</p>
+    <form method="get" action="/ShowAnimation">
+        <input type="time" name="DayStart" required />
+        <input type="time" name="DayEnd" required />
+        <button type="submit">Show Day Progress</button>
+    </form>
+</div>
