@@ -1,48 +1,40 @@
 @page
 @model Dayglass.Pages.ShowAnimationModel
 @{
-    ViewData["Title"] = "Day Countdown";
+    ViewData["Title"] = "Day Progress";
+    // Calculate total seconds in the user's day
+    var totalSeconds = (Model.DayEnd - Model.DayStart).TotalSeconds;
+    var now = DateTime.Now.TimeOfDay;
+    var elapsedSeconds = now > Model.DayEnd ? totalSeconds : (now < Model.DayStart ? 0 : (now - Model.DayStart).TotalSeconds);
 }
 
-<h2>Day Countdown</h2>
-
-<div id="timePassed">Seconds Passed: 0</div>
-<div id="timeRemaining">Seconds Remaining: 0</div>
+<div id="grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(5px, 1fr)); gap: 0.5px;">
+    @for (int i = 0; i < totalSeconds; i++)
+    {
+        var color = i < elapsedSeconds ? "red" : "green";
+        <div style="width: 5px; height: 5px; background-color: @color;"></div>
+    }
+</div>
 
 @section Scripts {
     <script>
-        // Calculate the user's day duration, elapsed time, and remaining time in seconds
-        const dayStart = new Date();
-        dayStart.setHours(@Model.DayStart.Hours, @Model.DayStart.Minutes, 0, 0);
-        const dayEnd = new Date();
-        dayEnd.setHours(@Model.DayEnd.Hours, @Model.DayEnd.Minutes, 0, 0);
-        const now = new Date();
+        let elapsedSeconds = Math.floor(@elapsedSeconds);
+        const cells = document.getElementById("grid").children;
 
-        let totalSeconds = Math.floor((dayEnd - dayStart) / 1000);
-        let elapsedSeconds = Math.floor((now - dayStart) / 1000);
-        let remainingSeconds = Math.max(totalSeconds - elapsedSeconds, 0);
+        function updateGrid() {
+            const now = new Date();
+            const dayStart = new Date(now);
+            dayStart.setHours(@Model.DayStart.Hours, @Model.DayStart.Minutes, 0, 0);
 
-        // Update the displayed counts every second
-        function updateCounts() {
-            // Calculate updated elapsed and remaining time
-            elapsedSeconds = Math.floor((new Date() - dayStart) / 1000);
-            remainingSeconds = Math.max(totalSeconds - elapsedSeconds, 0);
-
-            // Update the HTML elements
-            document.getElementById("timePassed").textContent = "Seconds Passed: " + elapsedSeconds;
-            document.getElementById("timeRemaining").textContent = "Seconds Remaining: " + remainingSeconds;
-
-            // End the countdown when the day is over
-            if (remainingSeconds <= 0) {
-                clearInterval(intervalId);
-                document.getElementById("timeRemaining").textContent = "The day has ended.";
+            const currentElapsedSeconds = Math.floor((now - dayStart) / 1000);
+            
+            while (elapsedSeconds < currentElapsedSeconds && elapsedSeconds < cells.length) {
+                cells[elapsedSeconds].style.backgroundColor = "red";
+                elapsedSeconds++;
             }
         }
 
-        // Call updateCounts every second
-        const intervalId = setInterval(updateCounts, 1000);
-
-        // Initialize the counts on page load
-        updateCounts();
+        // Update the grid every second
+        setInterval(updateGrid, 1000);
     </script>
 }
